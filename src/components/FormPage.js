@@ -1,14 +1,17 @@
 import React from 'react';
+import toCamelCase from '../utils/toCamelCase';
+import toPhoneNumber from '../utils/toPhoneNumber';
+
 
 const FormPage = ({newContact}) => {
     let name, number;
     const submit = (e) => {
         e.preventDefault();
         newContact({
-            name : name.value,
-            number : number.value,
-            id : number.value
-        });
+            name : toCamelCase(name.value),
+            number : toPhoneNumber(number.value),
+            id : toPhoneNumber(number.value)
+          });
         name.value = number.value = '';
     }
 
