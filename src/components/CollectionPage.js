@@ -1,34 +1,53 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import Contact from './Contact';
+import { getContacts, deleteContact } from './redux/actions';
 
-import { Contact } from './Contact';
 
-
-export const CollectionPage = ({contacts, onDelete}) => { 
-
-    
-
+const CollectionPage = ({ contacts =[], onDelete}) => {
     return (
-        <div>         
-             <table>
-                <thead>
-                    <tr>
-                        <th>Фио</th>
-                        <th>Телефон</th>
+            <div>         
+              <table>
+                 <thead>
+                     <tr>
+                         <th>Фио</th>
+                         <th>Телефон</th>
                         <th>Удалить</th>
                     </tr>
-                </thead>
-                <tbody>
+                 </thead>
+                 <tbody>
                     {
-                        contacts.map((item) => 
-                            <Contact
-                                key={item.number}
-                                {...item}
-                                onDelete={() => onDelete(item.id)}
-                            />
+                        contacts.map(contact =>
+                            <Contact key={contact.id}
+                            {...contact}
+                            on
+                            onDelete={() => onDelete(contact.id)} />
                         )
                     }
                 </tbody>
             </table>          
         </div>
+                 
     )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    contacts: state.contacts
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onGetContact: () => {
+      dispatch(getContacts())
+    },
+    onDeleteContact: () => {
+      dispatch(deleteContact())
+    },
+  }
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CollectionPage)
+

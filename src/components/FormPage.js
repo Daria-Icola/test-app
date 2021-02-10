@@ -1,45 +1,58 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { addContact } from './redux/actions';
+import toCamelCase from '../utils/toCamelCase';
+import toPhoneNumber from '../utils/toPhoneNumber';
+
 
 const FormPage = ({newContact}) => {
-    let name, number;
-    const submit = (e) => {
-        e.preventDefault();
+
+    let name, number 
+
+    const submit = e => {
+        e.preventDefault()
         newContact({
-            name : name.value,
-            number : number.value,
-            id : number.value
+            name : toCamelCase(name.value),
+            number : toPhoneNumber(number.value),
+            id : toPhoneNumber(number.value)
         });
         name.value = number.value = '';
+        
     }
 
     return (
-        <div>
-            <form onSubmit={submit}>
-                <label>
-                    ФИО <br/>
-                    <input 
-                        id="number"
-                        type="text"
-                        required
-                        ref={(input) => name = input} 
-                    />
-                    <br />
-                </label>
-                <label>
-                    Телефон <br />
-                    <input
-                        id="number"
-                        type="text"
-                        required
-                        ref={(input) => number = input} 
-                    />
-                    <br />
-                </label>
-                <br />
-                <input type="submit" value="Сохранить" />
-            </form>
-        </div>
-    );
+        <form onSubmit={submit}>
+            <label>
+                ФИО
+                <input ref={input => name = input}
+                    type="text" required/>
+            </label>
+            <label>
+                Телефон
+                <input ref={input => number = input}
+                    type="text" required/>
+            </label>
+            <button>Сохранить</button>
+        </form>
+    )
+
 }
 
-export default FormPage;
+
+const mapStateToProps = (state) => {
+  return {
+    contact: state.contact
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddContact: () => {
+      dispatch(addContact())
+    }
+  }
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FormPage)
+
